@@ -36,6 +36,8 @@ jobs:
           cd fresh-app
           pnpm rm ember-welcome-page
           head -n 4 ./app/templates/application.hbs > temp.hbs && mv temp.hbs ./app/templates/application.hbs
+      - name: Add a favicon
+        run: touch fresh-app/public/favicon.ico
       - name: Install puppeteer
         run: pnpm install
       - name: Serve and dump with puppeteer
