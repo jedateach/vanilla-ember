@@ -22,7 +22,7 @@
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
     "test": "concurrently \"pnpm:lint\" \"pnpm:test:*\" --names \"lint,test:\"",
-    "test:ember": "ember test"
+    "test:ember": "ember test --environment=production"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
