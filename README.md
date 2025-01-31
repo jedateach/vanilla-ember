@@ -1,0 +1,3 @@
+# Vanilla Ember
+
+Starting blank.
