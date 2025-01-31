@@ -31,5 +31,15 @@ jobs:
         run: pnpx ember-cli@5 new fresh-app --package-manager=pnpm
       - name: Update test-helpers package
         run: cd fresh-app && pnpm add @ember/test-helpers@4.0.5
-      - name: Run Tests with a production build
-        run: cd fresh-app && pnpm ember test --environment=production
+      - name: Install puppeteer
+        run: pnpm install
+      - name: Serve and dump with puppeteer
+        run: |
+          cd fresh-app
+          pnpm ember serve --environment=production & echo $! > ../server.pid
+          pnpx wait-on http://localhost:4200
+          node ../dump-browser.js || { echo "Console errors detected"; exit 1; }
+      - name: clean up
+        run: |
+          kill $(cat server.pid) || true
+          rm server.pid
