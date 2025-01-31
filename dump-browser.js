@@ -15,15 +15,19 @@ const puppeteer = require('puppeteer');
   let consoleErrorDetected = false;
 
   page.on('console', (msg) => {
-    console.log(`[BROWSER LOG]: ${msg.text()}`);
-    if (msg.type() === 'error') {
+    const type = msg.type();
+    const text = msg.text();
+    if (type === 'error') {
+      console.error(`\x1b[31m[BROWSER LOG]: ${text}\x1b[0m`); // Red color for errors
       consoleErrorDetected = true;
+    } else {
+      console.log(`\x1b[32m[BROWSER LOG]: ${text}\x1b[0m`); // Green color for other logs
     }
   });
 
   page.on('pageerror', error => {
-    console.error('[PAGE ERROR]:', error.message);
-    console.error(error.stack); // Output the full stack trace
+    console.error('\x1b[31m[PAGE ERROR]:', error.message, '\x1b[0m');
+    console.error('\x1b[31m', error.stack, '\x1b[0m'); // Red color for errors
     consoleErrorDetected = true;
   });
 
@@ -32,19 +36,20 @@ const puppeteer = require('puppeteer');
   await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for logs
 
   const domContent = await page.content();
-  console.log('[DOM CONTENT]:', domContent);
+  console.log('\x1b[34m[DOM CONTENT]:', domContent, '\x1b[0m'); // Blue color for DOM content
 
   const metrics = await page.metrics();
-  console.log('[PAGE METRICS]:', metrics);
+  console.log('\x1b[34m[PAGE METRICS]:', metrics, '\x1b[0m'); // Blue color for metrics
 
   const performanceTiming = JSON.parse(
     await page.evaluate(() => JSON.stringify(window.performance.timing))
   );
-  console.log('[PERFORMANCE TIMING]:', performanceTiming);
+  console.log('\x1b[34m[PERFORMANCE TIMING]:', performanceTiming, '\x1b[0m'); // Blue color for performance timing
 
   await browser.close();
 
   if (consoleErrorDetected) {
+    console.log('\x1b[31m[ERROR]: Console error detected. Exiting with status code 1.\x1b[0m');
     process.exit(1);
   }
 })();

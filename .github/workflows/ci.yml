@@ -38,7 +38,7 @@ jobs:
           cd fresh-app
           pnpm ember serve --environment=production & echo $! > ../server.pid
           pnpx wait-on http://localhost:4200
-          node ../dump-browser.js || { echo "Console errors detected"; exit 1; }
+          node ../dump-browser.js || { echo -e "\033[31mConsole errors detected\033[0m"; exit 1; }
       - name: clean up
         run: |
           kill $(cat server.pid) || true
