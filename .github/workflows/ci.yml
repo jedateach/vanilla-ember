@@ -29,5 +29,7 @@ jobs:
           node-version: 18
       - name: Install Ember
         run: pnpx ember-cli@5 new fresh-app --package-manager=pnpm
+      - name: Update test-helpers package
+        run: cd fresh-app && pnpm add @ember/test-helpers@4.0.5
       - name: Run Tests with a production build
         run: cd fresh-app && pnpm ember test --environment=production
